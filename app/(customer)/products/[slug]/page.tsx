@@ -34,11 +34,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               price: product.price,
               image: product.images?.[0] || '/placeholder.svg',
               description: product.description,
-              category: product.categories?.slug,
+              category: product.categories?.slug || 'general',
               rating: product.rating || 0,
               stock: product.quantity || 0,
-              currency: 'INR' as const,
-              category: product.categories?.slug || 'general'
+              currency: 'INR' as const
             }} />
 
             <div className="mt-8">

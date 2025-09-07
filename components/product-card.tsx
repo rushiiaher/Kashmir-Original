@@ -88,7 +88,10 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
           
           <Button
-            onClick={() => setCart(addToCart(cart, product, 1))}
+            onClick={() => setCart(addToCart(cart, {
+              ...product,
+              category: product.category || 'general'
+            }, 1))}
             disabled={product.stock === 0}
             className="w-full bg-emerald-700 hover:bg-emerald-800 disabled:bg-gray-300"
           >

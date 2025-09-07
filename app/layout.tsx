@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   keywords: ["Kashmir", "Pashmina", "Handicrafts", "Saffron", "Carpets", "Papier-mâché", "Walnut woodwork", "Kashmiri", "Multi-vendor", "E-commerce"],
   alternates: {
     canonical: "/",
-    sitemap: "/sitemap.xml",
   },
   openGraph: {
     type: "website",

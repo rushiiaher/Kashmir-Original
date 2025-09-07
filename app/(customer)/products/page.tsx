@@ -218,11 +218,10 @@ export default function ProductsPage() {
                 price: p.price,
                 image: p.images?.[0] || '/placeholder.svg',
                 description: p.description,
-                category: p.categories?.slug,
+                category: p.categories?.slug || 'general',
                 rating: p.rating || 0,
                 stock: p.quantity || 0,
-                currency: 'INR' as const,
-                category: p.categories?.slug || 'general'
+                currency: 'INR' as const
               }} />
             ))}
           </div>

@@ -13,6 +13,8 @@ export type Cart = {
   items: CartItem[]
 }
 
+export type CartStore = Cart
+
 export const emptyCart: Cart = { items: [] }
 
 export function addToCart(cart: Cart, product: Product, qty = 1): Cart {

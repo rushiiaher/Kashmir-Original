@@ -36,7 +36,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               description: product.description,
               category: product.categories?.slug,
               rating: product.rating || 0,
-              stock: product.quantity
+              stock: product.quantity,
+              currency: 'INR' as const
             }} />
 
             <div className="mt-8">

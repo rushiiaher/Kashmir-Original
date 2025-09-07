@@ -13,6 +13,7 @@ interface Product {
   category?: string
   rating?: number
   stock: number
+  currency: "INR" | "USD"
 }
 import { useLocalStorageSWR } from "@/lib/use-localstorage-swr"
 import { addToCart, emptyCart } from "@/lib/cart"

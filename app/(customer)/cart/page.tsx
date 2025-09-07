@@ -65,7 +65,7 @@ export default function CartPage() {
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h3 className="font-semibold text-lg">{item.name}</h3>
-                          <p className="text-sm text-gray-600">{item.category}</p>
+                          <p className="text-sm text-gray-600">{item.category || 'Product'}</p>
                         </div>
                         <Button
                           variant="ghost"

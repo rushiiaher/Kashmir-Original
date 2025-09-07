@@ -220,7 +220,8 @@ export default function ProductsPage() {
                 description: p.description,
                 category: p.categories?.slug,
                 rating: p.rating || 0,
-                stock: p.quantity
+                stock: p.quantity,
+                currency: 'INR' as const
               }} />
             ))}
           </div>

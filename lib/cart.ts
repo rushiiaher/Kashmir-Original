@@ -7,6 +7,7 @@ export type CartItem = {
   currency: "INR" | "USD"
   image: string
   quantity: number
+  category?: string
 }
 
 export type Cart = {
@@ -30,6 +31,7 @@ export function addToCart(cart: Cart, product: Product, qty = 1): Cart {
       currency: product.currency,
       image: product.image,
       quantity: qty,
+      category: product.category,
     })
   }
   return next

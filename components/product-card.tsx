@@ -3,22 +3,12 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-interface Product {
-  id: string
-  name: string
-  slug: string
-  price: number
-  image: string
-  description: string
-  category?: string
-  rating?: number
-  stock: number
-  currency: "INR" | "USD"
-}
+
 import { useLocalStorageSWR } from "@/lib/use-localstorage-swr"
 import { addToCart, emptyCart } from "@/lib/cart"
 import { emptyWishlist, toggleWish, hasWish } from "@/lib/wishlist"
 import { Heart, Star, ShoppingCart } from "lucide-react"
+import type { Product } from "@/types/product"
 
 export function ProductCard({ product }: { product: Product }) {
   const { data: cart, setData: setCart } = useLocalStorageSWR("cart", emptyCart)
@@ -69,7 +59,7 @@ export function ProductCard({ product }: { product: Product }) {
         <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
         
         {/* Rating */}
-        {product.rating && product.rating > 0 && (
+        {product.rating > 0 && (
           <div className="flex items-center gap-1">
             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
             <span className="text-sm font-medium">{product.rating}</span>
@@ -88,10 +78,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
           
           <Button
-            onClick={() => setCart(addToCart(cart, {
-              ...product,
-              category: product.category || 'general'
-            }, 1))}
+            onClick={() => setCart(addToCart(cart, product, 1))}
             disabled={product.stock === 0}
             className="w-full bg-emerald-700 hover:bg-emerald-800 disabled:bg-gray-300"
           >

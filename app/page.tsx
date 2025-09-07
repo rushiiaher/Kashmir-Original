@@ -102,8 +102,9 @@ export default async function HomePage() {
                 description: product.description,
                 category: product.categories?.slug,
                 rating: product.rating || 0,
-                stock: product.quantity,
-                currency: 'INR' as const
+                stock: product.quantity || 0,
+                currency: 'INR' as const,
+                category: product.categories?.slug || 'general'
               }} />
             ))}
           </div>

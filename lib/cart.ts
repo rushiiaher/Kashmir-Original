@@ -1,4 +1,4 @@
-import type { Product } from "./mock-data"
+import type { Product } from "@/types/product"
 
 export type CartItem = {
   productId: string
@@ -7,7 +7,7 @@ export type CartItem = {
   currency: "INR" | "USD"
   image: string
   quantity: number
-  category?: string
+  category: string
 }
 
 export type Cart = {

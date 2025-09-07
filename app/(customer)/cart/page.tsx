@@ -49,7 +49,7 @@ export default function CartPage() {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cart.items.map((item) => (
-              <Card key={item.id}>
+              <Card key={item.productId}>
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <div className="relative w-24 h-24 flex-shrink-0">
@@ -70,7 +70,7 @@ export default function CartPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => setCart(removeFromCart(cart, item.id))}
+                          onClick={() => setCart(removeFromCart(cart, item.productId))}
                           className="text-red-500 hover:text-red-700"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -82,7 +82,7 @@ export default function CartPage() {
                           <Button
                             variant="outline"
                             size="icon"
-                            onClick={() => setCart(updateQuantity(cart, item.id, Math.max(1, item.quantity - 1)))}
+                            onClick={() => setCart(updateQuantity(cart, item.productId, Math.max(1, item.quantity - 1)))}
                             disabled={item.quantity <= 1}
                           >
                             <Minus className="h-4 w-4" />
@@ -91,7 +91,7 @@ export default function CartPage() {
                           <Button
                             variant="outline"
                             size="icon"
-                            onClick={() => setCart(updateQuantity(cart, item.id, item.quantity + 1))}
+                            onClick={() => setCart(updateQuantity(cart, item.productId, item.quantity + 1))}
                           >
                             <Plus className="h-4 w-4" />
                           </Button>

@@ -43,8 +43,16 @@ export function updateQty(cart: Cart, productId: string, qty: number): Cart {
   return next
 }
 
+export function updateQuantity(cart: Cart, productId: string, qty: number): Cart {
+  return updateQty(cart, productId, qty)
+}
+
 export function removeItem(cart: Cart, productId: string): Cart {
   return { ...cart, items: cart.items.filter((i) => i.productId !== productId) }
+}
+
+export function removeFromCart(cart: Cart, productId: string): Cart {
+  return removeItem(cart, productId)
 }
 
 export function total(cart: Cart): number {

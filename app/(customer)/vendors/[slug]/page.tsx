@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { notFound } from "next/navigation"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
@@ -32,8 +33,9 @@ const vendors = [
   }
 ]
 
-export default function VendorStorePage({ params }: { params: { slug: string } }) {
-  const vendor = vendors.find(v => v.slug === params.slug)
+export default function VendorStorePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = React.use(params)
+  const vendor = vendors.find(v => v.slug === slug)
   if (!vendor) return notFound()
 
   // Filter products by vendor (in real app, this would be a proper vendor_id filter)

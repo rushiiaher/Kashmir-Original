@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState, useEffect } from "react"
+import React, { useMemo, useState, useEffect } from "react"
 import { notFound } from "next/navigation"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
@@ -10,7 +10,8 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { getCategoryBySlug } from "@/lib/data/categories"
 import { getProductsByCategory } from "@/lib/data/products"
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
+export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = React.use(params)
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState<any>(null)
   const [products, setProducts] = useState<any[]>([])

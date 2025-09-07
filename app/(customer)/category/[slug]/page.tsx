@@ -20,8 +20,8 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
   useEffect(() => {
     async function fetchData() {
       const [categoryData, productsData] = await Promise.all([
-        getCategoryBySlug(params.slug),
-        getProductsByCategory(params.slug)
+        getCategoryBySlug(slug),
+        getProductsByCategory(slug)
       ])
       
       if (!categoryData) {
@@ -33,7 +33,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
       setLoading(false)
     }
     fetchData()
-  }, [params.slug])
+  }, [slug])
 
   const categoryProducts = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -104,7 +104,8 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
               description: product.description,
               category: product.categories?.slug,
               rating: product.rating || 0,
-              stock: product.quantity
+              stock: product.quantity,
+              currency: 'INR' as const
             }} />
           ))}
         </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { ShoppingCart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -20,8 +21,17 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <Link href="/" className="font-sans text-xl font-semibold text-emerald-700">
-          Kashmir Original
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/ko-logo.png"
+            alt="Kashmir Original Logo"
+            width={40}
+            height={40}
+            className="object-contain"
+          />
+          <span className="font-sans text-xl font-semibold text-emerald-700">
+            Kashmir Original
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">

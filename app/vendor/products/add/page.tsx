@@ -26,6 +26,8 @@ export default function AddProduct() {
     sku: "",
     unit: "piece"
   })
+  const [images, setImages] = useState<File[]>([])
+  const [imagePreviews, setImagePreviews] = useState<string[]>([])
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
@@ -44,6 +46,34 @@ export default function AddProduct() {
       .order('name')
     
     setCategories(data || [])
+  }
+
+  const uploadImages = async (productId: string) => {
+    const imageUrls: string[] = []
+    
+    for (let i = 0; i < images.length; i++) {
+      const file = images[i]
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${productId}_${Date.now()}_${i}.${fileExt}`
+      
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        })
+      
+      if (!uploadError) {
+        const { data } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(fileName)
+        imageUrls.push(data.publicUrl)
+      } else {
+        console.error(`Failed to upload image ${i}:`, uploadError)
+      }
+    }
+    
+    return imageUrls
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,7 +98,8 @@ export default function AddProduct() {
       // Create slug from name
       const slug = formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 
-      const { error: insertError } = await supabase
+      // Insert product first
+      const { data: product, error: insertError } = await supabase
         .from('products')
         .insert({
           vendor_id: vendor.id,
@@ -83,13 +114,31 @@ export default function AddProduct() {
           unit: formData.unit,
           is_active: true
         })
+        .select()
+        .single()
 
       if (insertError) {
         setError(insertError.message)
-      } else {
-        setSuccess("Product added successfully!")
-        setTimeout(() => router.push('/vendor/products'), 2000)
+        setSubmitting(false)
+        return
       }
+
+      // Upload images if any
+      let imageUrls: string[] = []
+      if (images.length > 0) {
+        imageUrls = await uploadImages(product.id)
+      }
+
+      // Update product with image URLs
+      if (imageUrls.length > 0) {
+        await supabase
+          .from('products')
+          .update({ images: imageUrls })
+          .eq('id', product.id)
+      }
+
+      setSuccess("Product added successfully!")
+      setTimeout(() => router.push('/vendor/products'), 2000)
     } catch (err) {
       setError("Failed to add product")
     }
@@ -228,6 +277,52 @@ export default function AddProduct() {
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+
+            <div>
+              <Label htmlFor="images">Product Images</Label>
+              <Input
+                id="images"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => {
+                  const files = Array.from(e.target.files || [])
+                  setImages(files)
+                  
+                  // Create previews
+                  const previews = files.map(file => URL.createObjectURL(file))
+                  setImagePreviews(previews)
+                }}
+                className="mb-2"
+              />
+              <p className="text-sm text-gray-600">Upload up to 5 images (JPG, PNG)</p>
+              
+              {imagePreviews.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 mt-2">
+                  {imagePreviews.map((preview, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={preview}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-20 object-cover rounded border"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newImages = images.filter((_, i) => i !== index)
+                          const newPreviews = imagePreviews.filter((_, i) => i !== index)
+                          setImages(newImages)
+                          setImagePreviews(newPreviews)
+                        }}
+                        className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="flex gap-4">

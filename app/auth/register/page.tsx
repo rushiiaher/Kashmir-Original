@@ -34,7 +34,7 @@ export default function RegisterPage() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || window.location.origin}/auth/callback`,
         data: {
           full_name: fullName,
           phone: phone,
@@ -49,9 +49,18 @@ export default function RegisterPage() {
       return
     }
 
-    // User registered successfully, email confirmation sent automatically
-    setMessage("Registration successful! Please check your email and click the verification link to activate your account.")
-    setIsRegistered(true)
+    // Check if email confirmation is required
+    if (data.user && !data.session) {
+      setMessage("Registration successful! Please check your email and click the verification link to activate your account.")
+      setIsRegistered(true)
+    } else if (data.session) {
+      // Auto-confirmed, redirect to home
+      setMessage("Registration successful! Redirecting...")
+      setTimeout(() => router.push('/'), 2000)
+    } else {
+      setMessage("Registration successful! You can now log in.")
+      setIsRegistered(true)
+    }
     setLoading(false)
   }
 

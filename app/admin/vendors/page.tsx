@@ -20,13 +20,14 @@ export default function AdminVendors() {
   }, [])
 
   const fetchVendors = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('vendors')
-      .select(`
-        *,
-        profiles(full_name, email)
-      `)
+      .select('*')
       .order('created_at', { ascending: false })
+    
+    if (error) {
+      console.error('Error fetching vendors:', error)
+    }
     
     setVendors(data || [])
     setVendorsLoading(false)
@@ -79,10 +80,17 @@ export default function AdminVendors() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {vendors.map((vendor) => (
-                <TableRow key={vendor.id}>
+              {vendors.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                    No vendors found
+                  </TableCell>
+                </TableRow>
+              ) : (
+                vendors.map((vendor) => (
+                  <TableRow key={vendor.id}>
                   <TableCell className="font-medium">{vendor.store_name}</TableCell>
-                  <TableCell>{vendor.profiles?.full_name || 'N/A'}</TableCell>
+                  <TableCell>{vendor.business_email || 'N/A'}</TableCell>
                   <TableCell>
                     <Badge variant={vendor.status === 'active' ? 'default' : 'secondary'}>
                       {vendor.status}
@@ -115,8 +123,9 @@ export default function AdminVendors() {
                       )}
                     </div>
                   </TableCell>
-                </TableRow>
-              ))}
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>

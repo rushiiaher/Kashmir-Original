@@ -67,14 +67,9 @@ export async function getProductsByCategory(categorySlug: string) {
 }
 
 export async function getFeaturedProducts() {
-  // Return mock data if Supabase is not configured
+  // Return empty array if Supabase is not configured
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co') {
-    return products.map(product => ({
-      ...product,
-      images: [product.image],
-      quantity: product.stock,
-      categories: { slug: product.category }
-    }))
+    return []
   }
 
   const supabase = createClient()
@@ -92,12 +87,7 @@ export async function getFeaturedProducts() {
   
   if (error) {
     console.error('Error fetching featured products:', error)
-    return products.map(product => ({
-      ...product,
-      images: [product.image],
-      quantity: product.stock,
-      categories: { slug: product.category }
-    }))
+    return []
   }
   
   return data || []

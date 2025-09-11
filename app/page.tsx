@@ -60,32 +60,34 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-16 bg-gray-50">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="flex justify-between items-center mb-12">
-            <h2 className="text-3xl font-bold">Featured Products</h2>
-            <Button variant="outline" asChild>
-              <Link href="/products">View All</Link>
-            </Button>
+      {featuredProducts.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="mx-auto max-w-6xl px-4">
+            <div className="flex justify-between items-center mb-12">
+              <h2 className="text-3xl font-bold">Featured Products</h2>
+              <Button variant="outline" asChild>
+                <Link href="/products">View All</Link>
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={{
+                  id: product.id,
+                  name: product.name,
+                  slug: product.slug,
+                  price: product.price,
+                  image: product.images?.[0] || '/placeholder.svg',
+                  description: product.description,
+                  category: product.categories?.slug || 'general',
+                  rating: product.rating || 0,
+                  stock: product.quantity || 0,
+                  currency: 'INR' as const
+                }} />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={{
-                id: product.id,
-                name: product.name,
-                slug: product.slug,
-                price: product.price,
-                image: product.images?.[0] || '/placeholder.svg',
-                description: product.description,
-                category: product.categories?.slug || 'general',
-                rating: product.rating || 0,
-                stock: product.quantity || 0,
-                currency: 'INR' as const
-              }} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Why Choose Us */}
       <section className="py-16 bg-emerald-50">

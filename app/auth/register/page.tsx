@@ -17,11 +17,10 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState("")
   const [phone, setPhone] = useState("")
   const [role, setRole] = useState("customer")
-  const [otp, setOtp] = useState("")
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [error, setError] = useState("")
-  const [step, setStep] = useState<"register" | "verify">("register")
+  const [isRegistered, setIsRegistered] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -35,6 +34,7 @@ export default function RegisterPage() {
       email,
       password,
       options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
         data: {
           full_name: fullName,
           phone: phone,
@@ -50,37 +50,19 @@ export default function RegisterPage() {
     }
 
     // User registered successfully, email confirmation sent automatically
-    setMessage("Please check your email for verification link and OTP")
-    setStep("verify")
+    setMessage("Registration successful! Please check your email and click the verification link to activate your account.")
+    setIsRegistered(true)
     setLoading(false)
   }
 
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
 
-    const { error } = await supabase.auth.verifyOtp({
-      email: email,
-      token: otp,
-      type: "email"
-    })
-
-    if (error) {
-      setError(error.message)
-    } else {
-      setMessage("Account verified successfully!")
-      setTimeout(() => router.push("/"), 2000)
-    }
-    setLoading(false)
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center">
-            {step === "register" ? "Create Account" : "Verify Email"}
+            {isRegistered ? "Check Your Email" : "Create Account"}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -96,7 +78,7 @@ export default function RegisterPage() {
             </Alert>
           )}
 
-          {step === "register" && (
+          {!isRegistered && (
             <form onSubmit={handleRegister} className="space-y-4">
               <div>
                 <Label htmlFor="fullName">Full Name</Label>
@@ -169,27 +151,18 @@ export default function RegisterPage() {
             </form>
           )}
 
-          {step === "verify" && (
-            <form onSubmit={handleVerifyOtp} className="space-y-4">
-              <div>
-                <Label htmlFor="otp">Enter Email OTP</Label>
-                <Input
-                  id="otp"
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  placeholder="123456"
-                  maxLength={6}
-                  required
-                />
-                <p className="text-sm text-gray-600 mt-1">
-                  OTP sent to {email}
-                </p>
-              </div>
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Verifying..." : "Verify & Complete Registration"}
+          {isRegistered && (
+            <div className="text-center space-y-4">
+              <p className="text-sm text-gray-600">
+                We've sent a verification link to <strong>{email}</strong>
+              </p>
+              <p className="text-sm text-gray-600">
+                Please check your email and click the link to verify your account.
+              </p>
+              <Button asChild className="w-full">
+                <Link href="/auth/login">Go to Login</Link>
               </Button>
-            </form>
+            </div>
           )}
 
           <div className="text-center text-sm">

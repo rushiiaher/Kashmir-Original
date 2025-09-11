@@ -14,11 +14,11 @@ const mockReviews = [
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const [product, relatedProducts] = await Promise.all([
-    getProductBySlug(slug),
-    getFeaturedProducts()
-  ])
+  const product = await getProductBySlug(slug)
   if (!product) return notFound()
+  
+  // Get related products from same category or featured products as fallback
+  const relatedProducts = await getFeaturedProducts()
 
   return (
     <main>
@@ -91,22 +91,29 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         {/* Related Products */}
         <div className="mt-16">
           <h2 className="text-2xl font-bold mb-6">You May Also Like</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {relatedProducts.filter(p => p.id !== product.id).slice(0, 4).map((relatedProduct) => (
-              <ProductCard key={relatedProduct.id} product={{
-                id: relatedProduct.id,
-                name: relatedProduct.name,
-                slug: relatedProduct.slug,
-                price: relatedProduct.price,
-                image: relatedProduct.images?.[0] || '/placeholder.svg',
-                description: relatedProduct.description,
-                category: relatedProduct.categories?.slug || 'general',
-                rating: relatedProduct.rating || 0,
-                stock: relatedProduct.quantity || 0,
-                currency: 'INR' as const
-              }} />
-            ))}
-          </div>
+          {relatedProducts && relatedProducts.filter(p => p.id !== product.id).length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {relatedProducts.filter(p => p.id !== product.id).slice(0, 4).map((relatedProduct) => (
+                <ProductCard key={relatedProduct.id} product={{
+                  id: relatedProduct.id,
+                  name: relatedProduct.name,
+                  slug: relatedProduct.slug,
+                  price: relatedProduct.price,
+                  image: relatedProduct.images?.[0] || '/placeholder.svg',
+                  description: relatedProduct.description,
+                  category: relatedProduct.categories?.slug || 'general',
+                  rating: relatedProduct.rating || 0,
+                  stock: relatedProduct.quantity || 0,
+                  currency: 'INR' as const
+                }} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              <div className="text-4xl mb-2">🔍</div>
+              <p>No related products found</p>
+            </div>
+          )}
         </div>
       </div>
       <SiteFooter />

@@ -60,15 +60,15 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Products */}
-      {featuredProducts.length > 0 && (
-        <section className="py-16 bg-gray-50">
-          <div className="mx-auto max-w-6xl px-4">
-            <div className="flex justify-between items-center mb-12">
-              <h2 className="text-3xl font-bold">Featured Products</h2>
-              <Button variant="outline" asChild>
-                <Link href="/products">View All</Link>
-              </Button>
-            </div>
+      <section className="py-16 bg-gray-50">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-3xl font-bold">Featured Products</h2>
+            <Button variant="outline" asChild>
+              <Link href="/products">View All</Link>
+            </Button>
+          </div>
+          {featuredProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {featuredProducts.map((product) => (
                 <ProductCard key={product.id} product={{
@@ -85,9 +85,18 @@ export default async function HomePage() {
                 }} />
               ))}
             </div>
-          </div>
-        </section>
-      )}
+          ) : (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">🏪</div>
+              <h3 className="text-xl font-semibold mb-2">No Featured Products Yet</h3>
+              <p className="text-gray-600 mb-6">Our vendors are preparing amazing products for you!</p>
+              <Button asChild>
+                <Link href="/vendor">Become a Vendor</Link>
+              </Button>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Why Choose Us */}
       <section className="py-16 bg-emerald-50">

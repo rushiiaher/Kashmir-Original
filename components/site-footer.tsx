@@ -9,12 +9,12 @@ export function SiteFooter() {
             <Image
               src="/ko-logo.png"
               alt="Kashmir Original Logo"
-              width={32}
-              height={32}
+              width={80}
+              height={40}
               className="object-contain"
             />
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Kashmir Original. Handcrafted heritage from Kashmir.
+              © {new Date().getFullYear()} Handcrafted heritage from Kashmir.
             </p>
           </div>
           <div className="flex gap-6">

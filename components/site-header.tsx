@@ -21,17 +21,14 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/">
           <Image
             src="/ko-logo.png"
             alt="Kashmir Original Logo"
-            width={40}
-            height={40}
+            width={120}
+            height={60}
             className="object-contain"
           />
-          <span className="font-sans text-xl font-semibold text-emerald-700">
-            Kashmir Original
-          </span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">

@@ -2,6 +2,7 @@ import React from "react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { ProductCard } from "@/components/product-card"
+import { HeroCarousel } from "@/components/hero-carousel"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -21,32 +22,8 @@ export default async function HomePage() {
     <main>
       <SiteHeader />
       
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-emerald-600 to-emerald-800 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative mx-auto max-w-6xl px-4 py-20">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4 md:text-6xl">
-              Kashmir Bazaar
-            </h1>
-            <p className="text-xl mb-4 text-emerald-100">
-              Authentic Kashmiri Products from Verified Local Vendors
-            </p>
-            <p className="text-sm mb-8 text-emerald-200 max-w-2xl mx-auto">
-              Discover handcrafted pashminas, premium saffron, exquisite carpets, and traditional handicrafts directly from Kashmir's finest artisans
-            </p>
-            
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Button size="lg" className="bg-white text-emerald-800 hover:bg-gray-100" asChild>
-                <Link href="/products">Shop Now</Link>
-              </Button>
-              <Button size="lg" className="border-2 border-white text-white hover:bg-white hover:text-emerald-800" asChild>
-                <Link href="/vendors">Browse Vendors</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Carousel Section */}
+      <HeroCarousel />
 
       {/* Categories Section */}
       <section className="py-16">

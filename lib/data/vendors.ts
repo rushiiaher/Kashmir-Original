@@ -1,6 +1,32 @@
 import { createClient } from '@/lib/supabase/client'
 
+const mockVendors = [
+  {
+    id: 'v1',
+    store_name: 'Kashmir Craft House',
+    store_slug: 'kashmir-craft-house',
+    description: 'Authentic Kashmiri handicrafts and textiles'
+  },
+  {
+    id: 'v2', 
+    store_name: 'Saffron Valley',
+    store_slug: 'saffron-valley',
+    description: 'Premium saffron and spices from Kashmir'
+  },
+  {
+    id: 'v3',
+    store_name: 'Pashmina Palace',
+    store_slug: 'pashmina-palace', 
+    description: 'Luxury pashmina shawls and accessories'
+  }
+]
+
 export async function getVendors() {
+  // Return mock data if Supabase is not configured
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co') {
+    return mockVendors
+  }
+
   const supabase = createClient()
   
   const { data, error } = await supabase
@@ -12,7 +38,7 @@ export async function getVendors() {
   
   if (error) {
     console.error('Error fetching vendors:', error)
-    return []
+    return mockVendors
   }
   
   return data || []

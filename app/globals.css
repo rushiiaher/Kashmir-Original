@@ -123,3 +123,26 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Embla Carousel Styles */
+.embla {
+  overflow: hidden;
+}
+
+.embla__container {
+  display: flex;
+}
+
+.embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+/* Smooth transitions for carousel */
+.embla__slide img {
+  transition: transform 0.3s ease-in-out;
+}
+
+.embla__slide:hover img {
+  transform: scale(1.02);
+}

@@ -67,14 +67,10 @@ export async function getProductsByCategory(categorySlug: string) {
 }
 
 export async function getFeaturedProducts() {
-  // Return empty array if Supabase is not configured
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co') {
-    return []
-  }
-
   const supabase = createClient()
   
-  const { data, error } = await supabase
+  // First try to get featured products
+  const { data: featuredData, error: featuredError } = await supabase
     .from('products')
     .select(`
       *,
@@ -85,10 +81,25 @@ export async function getFeaturedProducts() {
     .eq('is_active', true)
     .limit(6)
   
-  if (error) {
-    console.error('Error fetching featured products:', error)
+  if (!featuredError && featuredData && featuredData.length > 0) {
+    return featuredData
+  }
+  
+  // Fallback: get any active products if no featured products
+  const { data: allData, error: allError } = await supabase
+    .from('products')
+    .select(`
+      *,
+      categories(name, slug),
+      vendors(store_name, store_slug)
+    `)
+    .eq('is_active', true)
+    .limit(6)
+  
+  if (allError) {
+    console.error('Error fetching products:', allError)
     return []
   }
   
-  return data || []
+  return allData || []
 }
